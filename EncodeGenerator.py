@@ -4,7 +4,7 @@ import pickle
 import os
 
 # Importing the student images
-folderPath = "C:/Users/madha/PycharmProjects/ai_project/Images"
+folderPath = "Local_folder_path"
 pathList = os.listdir(folderPath)
 print("Images found:", pathList)
 
