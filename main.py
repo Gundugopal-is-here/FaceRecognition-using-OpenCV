@@ -10,8 +10,8 @@ import time
 from datetime import datetime
 
 # 🔹 Initialize Firebase
-FIREBASE_CREDENTIALS = "myaiproject-7162b-firebase-adminsdk-fbsvc-47a49c1500.json"
-DATABASE_URL = "https://myaiproject-7162b-default-rtdb.firebaseio.com/"
+FIREBASE_CREDENTIALS = "FIREBASE_JSON"
+DATABASE_URL = "DATABASE_url"
 
 if not firebase_admin._apps:
     cred = credentials.Certificate(FIREBASE_CREDENTIALS)
