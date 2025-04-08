@@ -5,23 +5,23 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2 import service_account
 
-# 🔹 Load Google Drive API Credentials
-GDRIVE_CREDENTIALS = "your-google-drive-service-account.json"  # Replace with your Google Drive service account JSON file
+#Load Google Drive API Credentials
+GDRIVE_CREDENTIALS = "gdrive service-account.json"  # Replace with your Google Drive service account JSON file
 SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 
 creds = service_account.Credentials.from_service_account_file(GDRIVE_CREDENTIALS, scopes=SCOPES)
 drive_service = build("drive", "v3", credentials=creds)
 
-# 🔹 Load Firebase Credentials
-FIREBASE_CREDENTIALS = "your-firebase-service-account.json"  # Replace with your Firebase service account JSON file
+#Load Firebase Credentials
+FIREBASE_CREDENTIALS = "firebase-service-account.json"  # Replace with your Firebase service account JSON file
 firebase_admin.initialize_app(credentials.Certificate(FIREBASE_CREDENTIALS), {
     "databaseURL": "your-firebase-database-url"  # Replace with your Firebase database URL
 })
 
-# 🔹 Google Drive Folder ID (Where images will be stored)
-GDRIVE_FOLDER_ID = "your-google-drive-folder-id"  # Replace with your actual Google Drive folder ID
+#Google Drive Folder ID (Where images will be stored)
+GDRIVE_FOLDER_ID = "gdrivr folder-id"  # Replace with your actual Google Drive folder ID
 
-# 🔹 Updated Student Data
+#Updated Student Data
 students_data = {
     "student_id_1": {
         "name": "Student Name 1",
@@ -73,7 +73,7 @@ def upload_to_drive(file_path, file_name):
     media = MediaFileUpload(file_path, mimetype="image/jpeg")
     file = drive_service.files().create(body=file_metadata, media_body=media, fields="id").execute()
 
-    # 🔹 Make file publicly accessible
+    #Make file publicly accessible
     drive_service.permissions().create(
         fileId=file["id"], body={"role": "reader", "type": "anyone"}
     ).execute()
@@ -82,23 +82,23 @@ def upload_to_drive(file_path, file_name):
     print(f"✅ Uploaded: {file_name} → {public_url}")
     return public_url
 
-# 🔹 Upload Images & Save Student Data in Firebase
+#Upload Images & Save Student Data in Firebase
 image_folder = "your-local-image-folder-path"  # Change to your actual image folder path
 
 for student_id, student_info in students_data.items():
     image_path = find_image(student_id, image_folder)
 
     if image_path:
-        # 🔹 Upload to Google Drive, replacing old files
+        #Upload to Google Drive, replacing old files
         file_name = os.path.basename(image_path)
         image_url = upload_to_drive(image_path, file_name)
     else:
         image_url = "No Image Available"
 
-    # 🔹 Merge Image URL into Student Data
+    #Merge Image URL into Student Data
     student_info["image_url"] = image_url
 
-    # 🔹 Save ALL Student Data + Image URL under Students/{student_id} in a SINGLE operation
+    #Save ALL Student Data + Image URL under Students/{student_id} in a SINGLE operation
     db.reference(f"Students/{student_id}").set(student_info)
 
 print("✅ All student data and images uploaded successfully! (Duplicates Removed)")
