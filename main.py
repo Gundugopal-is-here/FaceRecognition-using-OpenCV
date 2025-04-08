@@ -9,7 +9,7 @@ from firebase_admin import credentials, db
 import time  # For timer logic
 from datetime import datetime
 
-# 🔹 Initialize Firebase
+#Initialize Firebase
 FIREBASE_CREDENTIALS = "your_firebase_credentials.json"  # 🔹 Replace with your actual Firebase credentials file
 DATABASE_URL = "your_firebase_database_url"  # 🔹 Replace with your actual Firebase database URL
 
@@ -17,19 +17,19 @@ if not firebase_admin._apps:
     cred = credentials.Certificate(FIREBASE_CREDENTIALS)
     firebase_admin.initialize_app(cred, {"databaseURL": DATABASE_URL})
 
-# 🔹 Start Camera
+#Start Camera
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
 cap.set(4, 480)
 
-# 🔹 Load UI Assets
+#Load image background
 imgBackground = cv2.imread('path_to_background_image.png')  # 🔹 Replace with the correct path
 
 folderModePath = 'path_to_mode_images'  # 🔹 Replace with the correct path
 modePath = os.listdir(folderModePath)
 imgModeList = [cv2.imread(os.path.join(folderModePath, path)) for path in modePath]
 
-# 🔹 Load Encoded Faces
+#Load Encoded Faces
 print("🔍 Loading Encode file...")
 with open('path_to_encode_file.p', 'rb') as file:  # 🔹 Replace with the correct path
     encodeListKnownWithIds = pickle.load(file)
@@ -37,7 +37,7 @@ with open('path_to_encode_file.p', 'rb') as file:  # 🔹 Replace with the corre
 encodeListKnown, studentIds = encodeListKnownWithIds
 print("✅ Encode File Loaded")
 
-# 🔹 Face Recognition Variables
+#Face Recognition Variables
 modeType = 0
 id = -1
 studentInfo = None
