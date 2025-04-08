@@ -4,15 +4,15 @@ from googleapiclient.discovery import build
 from google.oauth2.service_account import Credentials
 
 # 🔹 Firebase Initialization
-FIREBASE_CREDENTIALS = "myaiproject-7162b-firebase-adminsdk-fbsvc-47a49c1500.json"
-DATABASE_URL = "https://myaiproject-7162b-default-rtdb.firebaseio.com/"
+FIREBASE_CREDENTIALS = "firebase.json"
+DATABASE_URL = "firebase_database_URL"
 
 if not firebase_admin._apps:
     cred = credentials.Certificate(FIREBASE_CREDENTIALS)
     firebase_admin.initialize_app(cred, {"databaseURL": DATABASE_URL})
 
 # 🔹 Google Drive API Initialization
-GOOGLE_DRIVE_CREDENTIALS = "mydearfellow-4a512d5e7739.json"
+GOOGLE_DRIVE_CREDENTIALS = "GDRIVE_API_JSON"
 SCOPES = ["https://www.googleapis.com/auth/drive"]
 drive_creds = Credentials.from_service_account_file(GOOGLE_DRIVE_CREDENTIALS, scopes=SCOPES)
 drive_service = build("drive", "v3", credentials=drive_creds)
