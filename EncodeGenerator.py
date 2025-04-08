@@ -4,7 +4,7 @@ import pickle
 import os
 
 # Importing the student images
-folderPath = "your-local-image-folder-path"  # Replace with your actual image folder path
+folderPath = "local folder path containing images"  # Replace with your actual image folder path
 pathList = os.listdir(folderPath)
 print("Images found:", pathList)
 
@@ -46,7 +46,7 @@ encodeListKnownWithIds = [encodeListKnown, studentIds]
 print("Encoding complete. Total encoded faces:", len(encodeListKnown))
 
 # Save encodings using 'with open' to avoid file closing issues
-encodeFilePath = "your-encoded-file.p"  # Replace with your preferred filename
+encodeFilePath = "Encode.p"  # Replace with your preferred filename
 with open(encodeFilePath, 'wb') as file:
     pickle.dump(encodeListKnownWithIds, file)
 
