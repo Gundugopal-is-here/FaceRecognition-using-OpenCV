@@ -5,22 +5,22 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2.service_account import Credentials
 
-# 🔹 Firebase Initialization
-FIREBASE_CREDENTIALS = "myaiproject-7162b-firebase-adminsdk-fbsvc-47a49c1500.json"
-DATABASE_URL = "https://myaiproject-7162b-default-rtdb.firebaseio.com/"
+#Firebase
+FIREBASE_CREDENTIALS = "FIREBASE_json"
+DATABASE_URL = "DATABASE_URL"
 
 if not firebase_admin._apps:
     cred = credentials.Certificate(FIREBASE_CREDENTIALS)
     firebase_admin.initialize_app(cred, {"databaseURL": DATABASE_URL})
 
-# 🔹 Google Drive API Initialization
-GOOGLE_DRIVE_CREDENTIALS = "mydearfellow-4a512d5e7739.json"
+#Google Drive API
+GOOGLE_DRIVE_CREDENTIALS = "GDRIVE_JSON"
 SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 drive_creds = Credentials.from_service_account_file(GOOGLE_DRIVE_CREDENTIALS, scopes=SCOPES)
 drive_service = build("drive", "v3", credentials=drive_creds)
 
 
-# 🔹 Function to Upload Image to Google Drive
+#Upload Image to Google Drive
 def upload_to_drive(file_path, student_id):
     allowed_extensions = {".jpg", ".jpeg", ".png"}
     file_ext = os.path.splitext(file_path)[1].lower()
@@ -30,39 +30,36 @@ def upload_to_drive(file_path, student_id):
 
     file_metadata = {
         "name": f"{student_id}{file_ext}",
-        "parents": ["11wsmN3HWxAPwHxXMvE4e43Ef5cuOpfU5"]  # Replace with your Drive folder ID
+        "parents": ["GDRIVE_FOLDER_ID"]  # Replace with your Drive folder ID for student images
     }
     media = MediaFileUpload(file_path, mimetype=f"image/{file_ext[1:]}")
     file = drive_service.files().create(body=file_metadata, media_body=media, fields="id").execute()
     file_id = file.get("id")
 
-    # Make file publicly accessible
     drive_service.permissions().create(
         fileId=file_id, body={"role": "reader", "type": "anyone"}
     ).execute()
 
-    # Return file link
+    #show file location
     return f"https://drive.google.com/uc?id={file_id}"
 
 
-# 🔹 Get Student Details from User
+#Input details
 student_id = input("Enter Student ID: ")
 name = input("Enter Student Name: ")
-year = input("Enter Year of Study: ")
+year = input("Enter Years of Study: ")
 major = input("Enter Major: ")
-standing = input("Enter Standing (Good/Probation): ")
 starting_year = input("Enter Starting Year: ")
-image_path = input("Enter path to student's image (JPG, JPEG, PNG): ")
+image_path = input("Enter path to student's image (JPG, JPEG, PNG): ")  #Use Local path when uploading
 
-# 🔹 Upload Image to Drive
+#upload student image
 try:
     drive_link = upload_to_drive(image_path, student_id)
     print(f"✅ Image uploaded to Drive: {drive_link}")
 
-    # 🔹 Save Student Data to Firebase
+    #Save student data
     student_data = {
         "name": name,
-        "year": year,
         "major": major,
         "standing": standing,
         "starting_year": starting_year,
@@ -78,4 +75,3 @@ except ValueError as e:
     print(e)
 except Exception as e:
     print(f"❌ An error occurred: {e}")
-w
